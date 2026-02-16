@@ -16,8 +16,10 @@ MonoBehaviour:
   damage: 20
   maxDistance: 100
   fireRate: 0.2
+  effectiveRange: 40
+  accuracyDecayIntensity: 0.002
   moveSpreadMultiplier: 2.5
-  spread: 0.3
+  spread: 0.015
   recoilX: 2
   recoilY: 0.2
   recoilZ: 0.2

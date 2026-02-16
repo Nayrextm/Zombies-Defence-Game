@@ -13,6 +13,11 @@ public class WeaponData : ScriptableObject
     public float maxDistance = 100f;
     public float fireRate = 0.2f;
 
+    
+    [Header("Range & Accuracy Decay")]
+    public float effectiveRange = 50f;
+    public float accuracyDecayIntensity= 0.2f;
+
     [Header("Dynamic Spread")]
     public float moveSpreadMultiplier = 2.5f;
     public float spread = 0.05f;
@@ -27,7 +32,7 @@ public class WeaponData : ScriptableObject
     [Header("ADS Settings")]
     public float adsZoomFov = 40f;
     public float adsSpeed = 10f;
-    public float adsSpreadMultiplier = 0.5f;
+    public float adsSpreadMultiplier = 0.1f;
     public Vector3 adsPositionOffset;
 
 

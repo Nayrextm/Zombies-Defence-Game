@@ -66,18 +66,14 @@ public class WeaponController : MonoBehaviour
 
         float currentSpread = _weaponData.spread;
 
-
         if (_input.ads)
         {
+
             currentSpread *= _weaponData.adsSpreadMultiplier;
         }
-        else if (_characterController.velocity.magnitude > 0.1f )
+        else if (_characterController != null && _characterController.velocity.magnitude > 0.1f)
         {
-            currentSpread *= _weaponData.moveSpreadMultiplier;
-        }
 
-        if (_characterController != null && _characterController.velocity.magnitude > 0.1f)
-        {
             currentSpread *= _weaponData.moveSpreadMultiplier;
         }
 
@@ -90,21 +86,32 @@ public class WeaponController : MonoBehaviour
         else
             targetPoint = cameraRay.GetPoint(_weaponData.maxDistance);
 
+
+        float distanceToTarget = Vector3.Distance(_shootingPoint.position, targetPoint);
+
+        if (distanceToTarget > _weaponData.effectiveRange)
+        {
+
+            float extraDistance = distanceToTarget - _weaponData.effectiveRange;
+            currentSpread += extraDistance * _weaponData.accuracyDecayIntensity;
+        }
+
+
         Vector3 direction = targetPoint - _shootingPoint.position;
 
 
         Vector2 spreadOffset = Random.insideUnitCircle * currentSpread;
 
-        Vector3 finalDirection = direction +
+        Vector3 finalDirection = direction.normalized +
             (_shootingPoint.right * spreadOffset.x) +
             (_shootingPoint.up * spreadOffset.y);
-
 
         if (_recoilWeapon != null) _recoilWeapon.RecoilFire();
 
 
         if (Physics.Raycast(_shootingPoint.position, finalDirection, out RaycastHit finalHit, _weaponData.maxDistance))
         {
+            Debug.DrawRay(_shootingPoint.position, finalDirection * _weaponData.maxDistance, Color.red, 2f);
             DoImpactEffects(finalHit);
         }
     }
@@ -129,6 +136,7 @@ public class WeaponController : MonoBehaviour
         {
             target.TakeDamage(_weaponData.damage);
         }
+
     }
 
 }
