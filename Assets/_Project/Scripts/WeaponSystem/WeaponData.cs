@@ -13,12 +13,22 @@ public class WeaponData : ScriptableObject
     public float maxDistance = 100f;
     public float fireRate = 0.2f;
 
+    [Header("Dynamic Spread")]
+    public float moveSpreadMultiplier = 2.5f;
+    public float spread = 0.05f;
+
     [Header("Віддача|Recoil")]
     public float recoilX = 2f;
     public float recoilY = 1.5f;
     public float recoilZ = 0.5f;
     public float snapiness = 10f;
     public float returnSpeed = 5f;
+
+    [Header("ADS Settings")]
+    public float adsZoomFov = 40f;
+    public float adsSpeed = 10f;
+    public float adsSpreadMultiplier = 0.5f;
+    public Vector3 adsPositionOffset;
 
 
     [Header("Ефекти Влучання")]
@@ -30,12 +40,12 @@ public class WeaponData : ScriptableObject
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

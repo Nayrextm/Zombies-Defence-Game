@@ -22,6 +22,7 @@ namespace StarterAssets
 
 		[Header("Weapon Inputs")]
 		public bool shoot;
+		public bool ads;
 
 
 #if ENABLE_INPUT_SYSTEM
@@ -52,10 +53,15 @@ namespace StarterAssets
 		{
 			shoot = value.isPressed;
 		}
+
+        public void OnAds(InputValue value)
+        {
+            ads = value.isPressed;
+        }
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
