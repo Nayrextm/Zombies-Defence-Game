@@ -2,6 +2,7 @@ using System.Collections;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
+using DG.Tweening;
 
 public class WeaponController : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class WeaponController : MonoBehaviour
     private float _nextFireTime;
     private StarterAssetsInputs _input;
     private CharacterController _characterController;
+
+    private Tween _adsTween;
+    private Tween _fovTween;
 
 
 
@@ -38,8 +42,42 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        HandleADS();
         HandleShooting();
+        CheckInputForADS();
+    }
+
+    private bool _lastAdsState;
+    private void CheckInputForADS()
+    {
+        if (_input != null && _input.ads != _lastAdsState)
+        {
+            _lastAdsState = _input.ads;
+            PlayADSTween(_lastAdsState);
+        }
+    }
+
+    private void PlayADSTween(bool isAiming)
+    {
+        float targetFOV = isAiming ? _weaponData.adsZoomFov : _defaultFOV;
+        Vector3 targetPos = isAiming ? _weaponData.adsPositionOffset : _hipPosition;
+
+        _adsTween?.Kill();
+        _fovTween?.Kill();
+
+
+
+        //_virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(_virtualCamera.m_Lens.FieldOfView, targetFOV, Time.deltaTime * _weaponData.adsSpeed);
+        //_shootingPoint.parent.localPosition = Vector3.Lerp(_shootingPoint.parent.localPosition, targetPos, Time.deltaTime * _weaponData.adsSpeed);
+
+
+        _adsTween = _shootingPoint.parent.DOLocalMove(targetPos, _weaponData.adsSpeed)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(UpdateType.Normal, true);
+
+
+        _fovTween = DOTween.To(() => _virtualCamera.m_Lens.FieldOfView,
+            x => _virtualCamera.m_Lens.FieldOfView = x, targetFOV, _weaponData.adsSpeed)
+            .SetEase(Ease.InOutSine);
     }
 
     private void HandleShooting()
@@ -52,14 +90,7 @@ public class WeaponController : MonoBehaviour
             _input.shoot = false;
         }
     }
-    private void HandleADS()
-    {
-        float targetFOV = _input.ads ? _weaponData.adsZoomFov : _defaultFOV;
-        Vector3 targetPos = _input.ads ? _weaponData.adsPositionOffset : _hipPosition;
 
-        _virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(_virtualCamera.m_Lens.FieldOfView, targetFOV, Time.deltaTime * _weaponData.adsSpeed);
-        _shootingPoint.parent.localPosition = Vector3.Lerp(_shootingPoint.parent.localPosition, targetPos, Time.deltaTime * _weaponData.adsSpeed);
-    }
 
     private void Shoot()
     {
@@ -108,6 +139,7 @@ public class WeaponController : MonoBehaviour
 
         if (_recoilWeapon != null) _recoilWeapon.RecoilFire();
 
+        _virtualCamera.transform.DOShakePosition(0.1f, 0.2f, 10, 90f);
 
         if (Physics.Raycast(_shootingPoint.position, finalDirection, out RaycastHit finalHit, _weaponData.maxDistance))
         {

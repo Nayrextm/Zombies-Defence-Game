@@ -26,7 +26,7 @@ MonoBehaviour:
   snapiness: 20
   returnSpeed: 10
   adsZoomFov: 40
-  adsSpeed: 10
+  adsSpeed: 0.5
   adsSpreadMultiplier: 0.5
   adsPositionOffset: {x: 0, y: 0.18, z: 0}
   impactVFXprefab: {fileID: 6627408510034123234, guid: 83f4c75c2d9176a4ea5c0533dd34055e,

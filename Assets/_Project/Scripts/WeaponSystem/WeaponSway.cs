@@ -5,18 +5,22 @@ public class WeaponSway : MonoBehaviour
 {
     [Header("Налаштування інерції")]
     [SerializeField] private float _smooth = 8f;
-    [SerializeField] private float _swayMultipliyer = 2f;
+    [SerializeField] private float _swayMultiplier = 2f;
+
+    [SerializeField] private float _adsSwayReduction = 0.2f;
 
     private StarterAssets.StarterAssetsInputs _input;
     private void Awake()
     {
         _input = GetComponentInParent<StarterAssets.StarterAssetsInputs>();
     }
-    
+
     void Update()
     {
-        float mouseX = _input.look.x * _swayMultipliyer;
-        float mouseY = _input.look.y * _swayMultipliyer;
+        float currentSwayMultiplier = _input.ads ? (_swayMultiplier * _adsSwayReduction) : _swayMultiplier;
+
+        float mouseX = _input.look.x * currentSwayMultiplier;
+        float mouseY = _input.look.y * currentSwayMultiplier;
 
         Quaternion rotationX = Quaternion.AngleAxis(-mouseY, Vector3.right);
         Quaternion rotationY = Quaternion.AngleAxis(mouseX, Vector3.up);

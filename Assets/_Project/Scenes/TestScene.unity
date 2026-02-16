@@ -918,20 +918,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1182856462904956551
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5172896703669108181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e622cae93e6d51f49916d2c647bcc0ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _smooth: 8
-  _swayMultipliyer: 2
 --- !u!4 &1339382022427365889
 Transform:
   m_ObjectHideFlags: 0
@@ -1163,6 +1149,7 @@ GameObject:
   - component: {fileID: 8657385689989354064}
   - component: {fileID: 2947364731720838763}
   - component: {fileID: 6667065017358741688}
+  - component: {fileID: 8657385689989354065}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -2009,7 +1996,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5559224392502086615}
-  - component: {fileID: 1182856462904956551}
   m_Layer: 8
   m_Name: WeaponHolderPistol
   m_TagString: Untagged
@@ -2675,6 +2661,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7688464525873073562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8657385689989354065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991746642902224228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e622cae93e6d51f49916d2c647bcc0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _smooth: 8
+  _swayMultiplier: 2
+  _adsSwayReduction: 0.2
 --- !u!1 &8661749826203584980
 GameObject:
   m_ObjectHideFlags: 0
