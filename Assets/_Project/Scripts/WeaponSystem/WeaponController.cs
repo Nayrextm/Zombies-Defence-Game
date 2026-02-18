@@ -23,6 +23,11 @@ public class WeaponController : MonoBehaviour
     private Tween _adsTween;
     private Tween _fovTween;
 
+    [Header("Ammo Runtime")]
+    private int _currentAmmo;
+    private int _currentReserveAmmo;
+    private bool _isReloading;
+
 
 
     private void Awake()
@@ -36,14 +41,34 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
+        _currentAmmo = _weaponData.magSize;
+        _currentReserveAmmo = _weaponData.maxReserveAmmo;
+
+        UpdateUI();
+
         _defaultFOV = _virtualCamera.m_Lens.FieldOfView;
         _hipPosition = _shootingPoint.parent.localPosition;
     }
 
     private void Update()
     {
+        if (_isReloading) return;
+
         HandleShooting();
         CheckInputForADS();
+
+        HandleReload();
+    }
+
+    private void HandleReload()
+    {
+        if (_input != null && _input.reload)
+        {
+            StartReload();
+
+            _input.reload = false;
+        }
+
     }
 
     private bool _lastAdsState;
@@ -82,15 +107,61 @@ public class WeaponController : MonoBehaviour
 
     private void HandleShooting()
     {
-        if (_input != null && _input.shoot && Time.time >= _nextFireTime)
+        if (_input != null && _input.shoot && Time.time >= _nextFireTime && !_isReloading)
         {
-            _nextFireTime = Time.time + _weaponData.fireRate;
+            if (_currentAmmo > 0)
+            {
+                _nextFireTime = Time.time + _weaponData.fireRate;
 
-            Shoot();
-            _input.shoot = false;
+                Shoot();
+                _input.shoot = false;
+
+                _currentAmmo--;
+                UpdateUI();
+            }
+            else
+            {
+                StartReload();
+            }
         }
     }
 
+    void StartReload()
+    {
+        if (_isReloading || _currentAmmo == _weaponData.magSize || _currentReserveAmmo <= 0) return;
+
+        StartCoroutine(ReloadCoroutine());
+    }
+
+    private IEnumerator ReloadCoroutine()
+    {
+        _isReloading = true;
+
+
+        _shootingPoint.parent.DOLocalMove(_hipPosition + new Vector3(0, -0.2f, 0), 0.3f).SetEase(Ease.InBack);
+        _shootingPoint.parent.DOLocalRotate(new Vector3(15, 0, 0), 0.3f);
+
+        yield return new WaitForSeconds(_weaponData.reloadTime);
+
+
+        int ammoNeeded = _weaponData.magSize - _currentAmmo;
+        int ammoToRemove = Mathf.Min(_currentReserveAmmo, ammoNeeded);
+
+        _currentReserveAmmo -= ammoToRemove;
+        _currentAmmo += ammoToRemove;
+
+
+        _shootingPoint.parent.DOLocalMove(_hipPosition, 0.3f).SetEase(Ease.OutBack);
+        _shootingPoint.parent.DOLocalRotate(Vector3.zero, 0.3f);
+
+        _isReloading = false;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        WeaponUI.Instance?.UpdateAmmoText(_currentAmmo, _currentReserveAmmo);
+    }
 
     private void Shoot()
     {

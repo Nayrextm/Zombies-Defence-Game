@@ -23,6 +23,7 @@ namespace StarterAssets
 		[Header("Weapon Inputs")]
 		public bool shoot;
 		public bool ads;
+		public bool reload;
 
 
 #if ENABLE_INPUT_SYSTEM
@@ -58,6 +59,12 @@ namespace StarterAssets
         {
             ads = value.isPressed;
         }
+        public void OnReload(InputValue value)
+        {
+            reload = value.isPressed;
+        }
+
+        
 #endif
 
 

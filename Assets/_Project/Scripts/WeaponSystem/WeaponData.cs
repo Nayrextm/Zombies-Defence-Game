@@ -35,6 +35,11 @@ public class WeaponData : ScriptableObject
     public float adsSpreadMultiplier = 0.1f;
     public Vector3 adsPositionOffset;
 
+    [Header("Ammo Settings")]
+    public int magSize = 12;
+    public int maxReserveAmmo = 64;
+    public float reloadTime = 1.5f;
+
 
     [Header("Ефекти Влучання")]
     [Tooltip("Миттєвий ефект: іскри, пил, бризки крові")]
