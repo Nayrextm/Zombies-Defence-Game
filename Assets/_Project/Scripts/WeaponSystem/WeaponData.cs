@@ -41,6 +41,22 @@ public class WeaponData : ScriptableObject
     public float reloadTime = 1.5f;
 
 
+    [Header("Reload time")]
+    public float reloadPartialTime = 1.5f;
+    public float reloadEmptyTime = 2.2f;
+
+    [Header("Sound Settings")]
+    public AudioClip shootSound;
+    public AudioClip dryFireSound; 
+    [Range(0, 1)] public float shootVolume = 0.5f;
+    public float dryFireVolume = 0.4f;
+
+    [Header("Reload Sounds")] 
+    public AudioClip reloadPartialSound;
+    public AudioClip reloadEmptySound;
+    [Range(0, 1)] public float reloadVolume = 0.7f;
+
+
     [Header("Ефекти Влучання")]
     [Tooltip("Миттєвий ефект: іскри, пил, бризки крові")]
     public GameObject impactVFXprefab;
@@ -48,14 +64,5 @@ public class WeaponData : ScriptableObject
     [Tooltip("Постійний ефект: дірка від кулі (деколь)")]
     public GameObject bulletHolePrefab;
 
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 }

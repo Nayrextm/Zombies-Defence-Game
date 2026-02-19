@@ -29,6 +29,18 @@ MonoBehaviour:
   adsSpeed: 0.5
   adsSpreadMultiplier: 0.5
   adsPositionOffset: {x: 0, y: 0.18, z: 0}
+  magSize: 12
+  maxReserveAmmo: 64
+  reloadTime: 1.5
+  reloadPartialTime: 1.5
+  reloadEmptyTime: 2.2
+  shootSound: {fileID: 8300000, guid: b2d159f7e00d44d9bbc2d50a0c4fef59, type: 3}
+  dryFireSound: {fileID: 8300000, guid: 9158afb6966d445db9caf1dccf7acbcc, type: 3}
+  shootVolume: 0.5
+  dryFireVolume: 0.3
+  reloadPartialSound: {fileID: 8300000, guid: eb5685b26a6494994af389a3293064e8, type: 3}
+  reloadEmptySound: {fileID: 8300000, guid: e5198250a6a57408bb36e14bc4a322c4, type: 3}
+  reloadVolume: 0.7
   impactVFXprefab: {fileID: 6627408510034123234, guid: 83f4c75c2d9176a4ea5c0533dd34055e,
     type: 3}
   bulletHolePrefab: {fileID: 5723792913582663465, guid: 636a8d60f543cc445aa4d1a3d00950bf,

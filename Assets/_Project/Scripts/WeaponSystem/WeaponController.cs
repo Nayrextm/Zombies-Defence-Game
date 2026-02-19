@@ -28,10 +28,14 @@ public class WeaponController : MonoBehaviour
     private int _currentReserveAmmo;
     private bool _isReloading;
 
+    private WeaponAudio _weaponAudio;
+
 
 
     private void Awake()
     {
+        _weaponAudio = GetComponent<WeaponAudio>();
+
         _input = GetComponentInParent<StarterAssetsInputs>();
         if (_playerController != null)
         {
@@ -114,14 +118,21 @@ public class WeaponController : MonoBehaviour
                 _nextFireTime = Time.time + _weaponData.fireRate;
 
                 Shoot();
-                _input.shoot = false;
 
                 _currentAmmo--;
                 UpdateUI();
+                _input.shoot = false;
             }
             else
             {
-                StartReload();
+                _weaponAudio.PlayEmptyClick(_weaponData.dryFireSound, _weaponData.dryFireVolume);
+
+                _nextFireTime = Time.time + 0.2f;
+
+                _input.shoot = false;
+
+
+                //auto reload -> StartReload();
             }
         }
     }
@@ -137,22 +148,38 @@ public class WeaponController : MonoBehaviour
     {
         _isReloading = true;
 
+        
+        if (_input.ads)
+        {
+            _input.ads = false;
+            PlayADSTween(false);
+            yield return new WaitForSeconds(0.15f); 
+        }
 
-        _shootingPoint.parent.DOLocalMove(_hipPosition + new Vector3(0, -0.2f, 0), 0.3f).SetEase(Ease.InBack);
-        _shootingPoint.parent.DOLocalRotate(new Vector3(15, 0, 0), 0.3f);
+        
+        bool isEmpty = _currentAmmo <= 0;
+        AudioClip soundToPlay = isEmpty ? _weaponData.reloadEmptySound : _weaponData.reloadPartialSound;
+        float waitTime = isEmpty ? _weaponData.reloadEmptyTime : _weaponData.reloadPartialTime;
+        float tiltAngle = isEmpty ? 25f : 15f;
 
-        yield return new WaitForSeconds(_weaponData.reloadTime);
+       
+        _weaponAudio.PlayReload(soundToPlay, _weaponData.reloadVolume);
 
+        _shootingPoint.parent.DOLocalMove(_hipPosition + new Vector3(0, -0.25f, 0), 0.4f).SetEase(Ease.InSine);
+        _shootingPoint.parent.DOLocalRotate(new Vector3(tiltAngle, 5f, 0), 0.4f).SetEase(Ease.InSine);
 
+       
+        yield return new WaitForSeconds(waitTime);
+
+     
         int ammoNeeded = _weaponData.magSize - _currentAmmo;
         int ammoToRemove = Mathf.Min(_currentReserveAmmo, ammoNeeded);
-
         _currentReserveAmmo -= ammoToRemove;
         _currentAmmo += ammoToRemove;
 
-
-        _shootingPoint.parent.DOLocalMove(_hipPosition, 0.3f).SetEase(Ease.OutBack);
-        _shootingPoint.parent.DOLocalRotate(Vector3.zero, 0.3f);
+        
+        _shootingPoint.parent.DOLocalMove(_hipPosition, 0.45f).SetEase(Ease.OutBack);
+        _shootingPoint.parent.DOLocalRotate(Vector3.zero, 0.45f).SetEase(Ease.OutBack);
 
         _isReloading = false;
         UpdateUI();
@@ -165,6 +192,8 @@ public class WeaponController : MonoBehaviour
 
     private void Shoot()
     {
+
+        _weaponAudio.PlayShoot(_weaponData.shootSound, _weaponData.shootVolume);
 
         float currentSpread = _weaponData.spread;
 
