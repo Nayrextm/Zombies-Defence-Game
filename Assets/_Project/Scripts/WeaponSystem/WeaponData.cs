@@ -56,6 +56,7 @@ public class WeaponData : ScriptableObject
     public AudioClip reloadEmptySound;
     [Range(0, 1)] public float reloadVolume = 0.7f;
 
+ 
 
     [Header("Ефекти Влучання")]
     [Tooltip("Миттєвий ефект: іскри, пил, бризки крові")]

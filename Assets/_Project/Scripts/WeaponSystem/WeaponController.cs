@@ -28,6 +28,9 @@ public class WeaponController : MonoBehaviour
     private int _currentReserveAmmo;
     private bool _isReloading;
 
+    [Header("Visual Effects")]
+    [SerializeField] private ParticleSystem _muzzleFlash;
+
     private WeaponAudio _weaponAudio;
 
 
@@ -148,36 +151,36 @@ public class WeaponController : MonoBehaviour
     {
         _isReloading = true;
 
-        
+
         if (_input.ads)
         {
             _input.ads = false;
             PlayADSTween(false);
-            yield return new WaitForSeconds(0.15f); 
+            yield return new WaitForSeconds(0.15f);
         }
 
-        
+
         bool isEmpty = _currentAmmo <= 0;
         AudioClip soundToPlay = isEmpty ? _weaponData.reloadEmptySound : _weaponData.reloadPartialSound;
         float waitTime = isEmpty ? _weaponData.reloadEmptyTime : _weaponData.reloadPartialTime;
         float tiltAngle = isEmpty ? 25f : 15f;
 
-       
+
         _weaponAudio.PlayReload(soundToPlay, _weaponData.reloadVolume);
 
         _shootingPoint.parent.DOLocalMove(_hipPosition + new Vector3(0, -0.25f, 0), 0.4f).SetEase(Ease.InSine);
         _shootingPoint.parent.DOLocalRotate(new Vector3(tiltAngle, 5f, 0), 0.4f).SetEase(Ease.InSine);
 
-       
+
         yield return new WaitForSeconds(waitTime);
 
-     
+
         int ammoNeeded = _weaponData.magSize - _currentAmmo;
         int ammoToRemove = Mathf.Min(_currentReserveAmmo, ammoNeeded);
         _currentReserveAmmo -= ammoToRemove;
         _currentAmmo += ammoToRemove;
 
-        
+
         _shootingPoint.parent.DOLocalMove(_hipPosition, 0.45f).SetEase(Ease.OutBack);
         _shootingPoint.parent.DOLocalRotate(Vector3.zero, 0.45f).SetEase(Ease.OutBack);
 
@@ -192,6 +195,8 @@ public class WeaponController : MonoBehaviour
 
     private void Shoot()
     {
+        if (_muzzleFlash != null)
+            _muzzleFlash.Play();
 
         _weaponAudio.PlayShoot(_weaponData.shootSound, _weaponData.shootVolume);
 
