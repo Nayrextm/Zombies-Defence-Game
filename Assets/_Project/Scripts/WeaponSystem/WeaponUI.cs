@@ -6,7 +6,7 @@ public class WeaponUI : MonoBehaviour
 {
     public static WeaponUI Instance;
 
-    [SerializeField] private TMP_Text _ammoText;
+    [SerializeField] private TextMeshProUGUI _ammoText;
 
     void Awake()
     {

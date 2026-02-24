@@ -3,13 +3,29 @@ using UnityEngine.AI;
 
 public class ZombieAI : MonoBehaviour
 {
-    [Header("Налаштування")]
+    [Header("Attack Settings")]
     [SerializeField] private float _attackDistance = 1.5f;
+    [SerializeField] private float _attackCooldown = 1.5f;
+
+    [Header("Move Settings")]
     [SerializeField] private float _updatePathDelay = 0.2f;
+
+
+    [Header("Animations")]
+    [SerializeField] private Animator _animator;
+
+    private readonly int _isMovingHash = Animator.StringToHash("IsMoving");
+    private readonly int _doAttackHash = Animator.StringToHash("DoAttack");
+
+    private bool _wasMoving;
 
     private NavMeshAgent _agent;
     private Transform _playerTransform;
     private float _nextUpdateTime;
+    private float _lastAttackTime;
+
+    private float _sqrAttackDistance;
+
 
     void Awake()
     {
@@ -18,22 +34,37 @@ public class ZombieAI : MonoBehaviour
 
     private void Start()
     {
-        
+
         if (Player.Instance != null)
         {
             _playerTransform = Player.Instance.transform;
         }
+
+        _sqrAttackDistance = _attackDistance * _attackDistance;
     }
 
     void Update()
     {
-        
         if (_playerTransform == null) return;
 
-       
+        bool isMovingNow = _agent.velocity.sqrMagnitude > 0.05f;
+
+        
+        if (isMovingNow != _wasMoving)
+        {
+            if (_animator != null)
+            {
+                
+                _animator.SetBool(_isMovingHash, isMovingNow);
+            }
+           
+            _wasMoving = isMovingNow;
+        }
+
         if (Time.time > _nextUpdateTime)
         {
             _nextUpdateTime = Time.time + _updatePathDelay;
+
             MoveToPlayer();
         }
 
@@ -42,29 +73,64 @@ public class ZombieAI : MonoBehaviour
 
     private void MoveToPlayer()
     {
-       
+
         _agent.SetDestination(_playerTransform.position);
     }
 
     private void CheckAttackDistance()
     {
-        float distance = Vector3.Distance(transform.position, _playerTransform.position);
 
-        if (distance <= _attackDistance)
+        Vector3 offset = _playerTransform.position - transform.position;
+
+        float sqrDistance = offset.sqrMagnitude;
+
+
+        if (sqrDistance <= _sqrAttackDistance)
         {
             _agent.isStopped = true;
-            Attack();
+
+            FaceTarget(offset);
+
+            if (Time.time >= _lastAttackTime + _attackCooldown)
+            {
+                Attack();
+                _lastAttackTime = Time.time;
+            }
         }
         else
         {
-           
+
             _agent.isStopped = false;
         }
     }
 
     private void Attack()
     {
+        if(_animator != null)
+        {
+            _animator.SetTrigger(_doAttackHash);
+        }
+        Debug.Log("Зомбі замахнувся!");
+
+        if (_playerTransform.TryGetComponent(out IDamageable damageable))
+        {
+            damageable.TakeDamage(10f); 
+        }
+    }
+
+    
+    private void FaceTarget(Vector3 direction)
+    {
         
-        Debug.Log("Зомбі атакує гравця!");
+        direction.y = 0;
+
+        if (direction.sqrMagnitude > 0.01f) 
+        {
+            
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+
+            
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        }
     }
 }

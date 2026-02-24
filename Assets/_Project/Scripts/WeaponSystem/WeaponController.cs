@@ -20,6 +20,8 @@ public class WeaponController : MonoBehaviour
     private StarterAssetsInputs _input;
     private CharacterController _characterController;
 
+    [SerializeField] private LayerMask _hitMask;
+
     private Tween _adsTween;
     private Tween _fovTween;
 
@@ -217,7 +219,7 @@ public class WeaponController : MonoBehaviour
         Ray cameraRay = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint;
 
-        if (Physics.Raycast(cameraRay, out RaycastHit hit, _weaponData.maxDistance))
+        if (Physics.Raycast(cameraRay, out RaycastHit hit, _weaponData.maxDistance, _hitMask))
             targetPoint = hit.point;
         else
             targetPoint = cameraRay.GetPoint(_weaponData.maxDistance);
@@ -246,9 +248,15 @@ public class WeaponController : MonoBehaviour
 
         _virtualCamera.transform.DOShakePosition(0.1f, 0.2f, 10, 90f);
 
-        if (Physics.Raycast(_shootingPoint.position, finalDirection, out RaycastHit finalHit, _weaponData.maxDistance))
+        if (Physics.Raycast(_shootingPoint.position, finalDirection, out RaycastHit finalHit, _weaponData.maxDistance, _hitMask))
         {
             Debug.DrawRay(_shootingPoint.position, finalDirection * _weaponData.maxDistance, Color.red, 2f);
+
+            if (finalHit.collider.TryGetComponent(out IDamageable target))
+            {
+                target.TakeDamage(_weaponData.damage);
+            }
+
             DoImpactEffects(finalHit);
         }
     }
