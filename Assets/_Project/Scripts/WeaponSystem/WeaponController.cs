@@ -28,7 +28,9 @@ public class WeaponController : MonoBehaviour
     [Header("Ammo Runtime")]
     private int _currentAmmo;
     private int _currentReserveAmmo;
+
     private bool _isReloading;
+    public bool IsReloading => _isReloading;
 
     [Header("Visual Effects")]
     [SerializeField] private ParticleSystem _muzzleFlash;
@@ -98,20 +100,26 @@ public class WeaponController : MonoBehaviour
         _adsTween?.Kill();
         _fovTween?.Kill();
 
-
-
-        //_virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(_virtualCamera.m_Lens.FieldOfView, targetFOV, Time.deltaTime * _weaponData.adsSpeed);
-        //_shootingPoint.parent.localPosition = Vector3.Lerp(_shootingPoint.parent.localPosition, targetPos, Time.deltaTime * _weaponData.adsSpeed);
-
-
+       
         _adsTween = _shootingPoint.parent.DOLocalMove(targetPos, _weaponData.adsSpeed)
             .SetEase(Ease.OutBack)
             .SetUpdate(UpdateType.Normal, true);
 
-
+      
         _fovTween = DOTween.To(() => _virtualCamera.m_Lens.FieldOfView,
             x => _virtualCamera.m_Lens.FieldOfView = x, targetFOV, _weaponData.adsSpeed)
             .SetEase(Ease.InOutSine);
+
+        
+        var perlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        if (perlin != null)
+        {
+            
+            float targetAmplitude = isAiming ? 0.05f : 0.5f;
+
+            DOTween.To(() => perlin.m_AmplitudeGain, x => perlin.m_AmplitudeGain = x, targetAmplitude, _weaponData.adsSpeed)
+                .SetEase(Ease.InOutSine);
+        }
     }
 
     private void HandleShooting()
@@ -277,10 +285,10 @@ public class WeaponController : MonoBehaviour
             hole.transform.localScale = Vector3.one * 0.05f;
         }
 
-        if (hit.transform.TryGetComponent<IDamageable>(out IDamageable target))
-        {
-            target.TakeDamage(_weaponData.damage);
-        }
+        //if (hit.transform.TryGetComponent<IDamageable>(out IDamageable target))
+        //{
+        //    target.TakeDamage(_weaponData.damage);
+        //}
 
     }
 

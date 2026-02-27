@@ -56,7 +56,9 @@ public class WeaponData : ScriptableObject
     public AudioClip reloadEmptySound;
     [Range(0, 1)] public float reloadVolume = 0.7f;
 
- 
+    [Header("Physical Senses")]
+    public float wallCheckDistance = 0.5f;
+    public float maxPushBack = 0.35f;
 
     [Header("Ефекти Влучання")]
     [Tooltip("Миттєвий ефект: іскри, пил, бризки крові")]

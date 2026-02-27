@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class ZombieAI : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class ZombieAI : MonoBehaviour
 
     [Header("Animations")]
     [SerializeField] private Animator _animator;
+
+    [SerializeField] private ZombieAnimationEvents _animationEvents;
 
     private readonly int _isMovingHash = Animator.StringToHash("IsMoving");
     private readonly int _doAttackHash = Animator.StringToHash("DoAttack");
@@ -31,7 +34,6 @@ public class ZombieAI : MonoBehaviour
     {
         _agent = GetComponent<NavMeshAgent>();
     }
-
     private void Start()
     {
 
@@ -42,6 +44,23 @@ public class ZombieAI : MonoBehaviour
 
         _sqrAttackDistance = _attackDistance * _attackDistance;
     }
+
+    private void OnEnable()
+    {
+        if (_animationEvents != null)
+        {
+            _animationEvents.OnAttackHitEvent += DealDamageToPlayer;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_animationEvents != null)
+        {
+            _animationEvents.OnAttackHitEvent -= DealDamageToPlayer;
+        }
+    }
+
 
     void Update()
     {
@@ -110,15 +129,19 @@ public class ZombieAI : MonoBehaviour
         {
             _animator.SetTrigger(_doAttackHash);
         }
-        Debug.Log("Зомбі замахнувся!");
+    }
+    private void DealDamageToPlayer()
+    {
 
-        if (_playerTransform.TryGetComponent(out IDamageable damageable))
+        Debug.Log("Зомбі ВДАРИВ точно в ціль!");
+
+        if (_playerTransform != null && _playerTransform.TryGetComponent(out IDamageable damageable))
         {
             damageable.TakeDamage(10f); 
         }
     }
 
-    
+
     private void FaceTarget(Vector3 direction)
     {
         
