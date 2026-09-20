@@ -38,7 +38,6 @@ public class WeaponController : MonoBehaviour
     private WeaponAudio _weaponAudio;
 
 
-
     private void Awake()
     {
         _weaponAudio = GetComponent<WeaponAudio>();
@@ -284,23 +283,5 @@ public class WeaponController : MonoBehaviour
             hole.transform.SetParent(hit.transform);
             hole.transform.localScale = Vector3.one * 0.05f;
         }
-
-        //if (hit.transform.TryGetComponent<IDamageable>(out IDamageable target))
-        //{
-        //    target.TakeDamage(_weaponData.damage);
-        //}
-
     }
-
 }
-
-//if (_weaponData.bulletHolePrefab != null)
-//{
-//    Vector3 spawnPosition = finalHit.point + (finalHit.normal * 0.01f);
-
-//    Quaternion holeRotation = Quaternion.LookRotation(finalHit.normal);
-
-//    GameObject hole = Instantiate(_weaponData.bulletHolePrefab, spawnPosition, holeRotation);
-
-//    hole.transform.SetParent(finalHit.transform);
-//}

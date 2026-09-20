@@ -26,31 +26,7 @@ public class WeaponBobbing : MonoBehaviour
         _controller = GetComponentInParent<CharacterController>();
         _startLocalPos = transform.localPosition;
     }
-    //void Update()
-    //{
-    //    Vector3 horizontalVelocity = new Vector3(_controller.velocity.x, 0, _controller.velocity.z);
-    //    float currentSpeed = horizontalVelocity.magnitude;
-
-
-    //    if (currentSpeed > 0.1f)
-    //    {
-    //        _timer *= Time.deltaTime * _bobSpeed * currentSpeed;
-
-
-    //        float multiplier = _inputs.ads ? _adsReduction : 0.1f;
-    //        float moveX = Mathf.Cos(_timer * 0.5f) * _bobAmount * multiplier;
-    //        float moveY = Mathf.Sin(_timer) * _bobAmount * multiplier;
-
-    //        Vector3 targetPos = _startLocalPos + new Vector3(moveX, moveY, 0);
-    //        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * _smooth);
-
-    //    }
-    //    else
-    //    {
-    //        _timer = 0f;
-    //        transform.localPosition = Vector3.Lerp(transform.localPosition, _startLocalPos, Time.deltaTime * _smooth);
-    //    }
-    //}
+    
     void Update()
     {
         
@@ -59,7 +35,6 @@ public class WeaponBobbing : MonoBehaviour
       
         if (inputMagnitude > 0.1f && !(_inputs.ads && _adsReduction <= 0f))
         {
-            
             _timer += Time.deltaTime * _bobSpeed * (inputMagnitude * 0.5f);
 
             float multiplier = _inputs.ads ? _adsReduction : 1f;
@@ -76,7 +51,6 @@ public class WeaponBobbing : MonoBehaviour
         }
         else
         {
-           
             _timer = Mathf.Lerp(_timer, 0, Time.deltaTime * _smooth);
             transform.localPosition = Vector3.Lerp(transform.localPosition, _startLocalPos, Time.deltaTime * _smooth);
             transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, Time.deltaTime * _smooth);

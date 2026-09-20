@@ -9,7 +9,6 @@ public class ZombieAnimationEvents : MonoBehaviour
 
     public void TriggerAttackHit()
     {
-        
         OnAttackHitEvent?.Invoke();
     }
 }

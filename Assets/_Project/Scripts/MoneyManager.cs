@@ -5,7 +5,7 @@ public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance { get; private set; }
 
-    [Header("Налаштування економіки")]
+    [Header("Fine-tuning the economy")]
     [SerializeField] private int _startingMoney = 500;
 
     private int _currentMoney;
@@ -44,7 +44,7 @@ public class MoneyManager : MonoBehaviour
             return true;
         }
 
-        Debug.Log("Недостатньо коштів для покупки!");
+        Debug.Log("Insufficient funds for the purchase!");
         return false;
     }
 

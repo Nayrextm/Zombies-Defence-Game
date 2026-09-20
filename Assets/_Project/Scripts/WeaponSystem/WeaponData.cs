@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class WeaponData : ScriptableObject
 {
-    [Header("Назва зброї")]
+    [Header("Weapon Name")]
     public string weaponName = "Pistol";
 
-    [Header("Стрільба")]
+    [Header("Shooting")]
     public float damage = 20f;
     public float maxDistance = 100f;
     public float fireRate = 0.2f;
@@ -22,7 +22,7 @@ public class WeaponData : ScriptableObject
     public float moveSpreadMultiplier = 2.5f;
     public float spread = 0.05f;
 
-    [Header("Віддача|Recoil")]
+    [Header("Recoil")]
     public float recoilX = 2f;
     public float recoilY = 1.5f;
     public float recoilZ = 0.5f;
@@ -39,7 +39,6 @@ public class WeaponData : ScriptableObject
     public int magSize = 12;
     public int maxReserveAmmo = 64;
     public float reloadTime = 1.5f;
-
 
     [Header("Reload time")]
     public float reloadPartialTime = 1.5f;
@@ -60,12 +59,10 @@ public class WeaponData : ScriptableObject
     public float wallCheckDistance = 0.5f;
     public float maxPushBack = 0.35f;
 
-    [Header("Ефекти Влучання")]
-    [Tooltip("Миттєвий ефект: іскри, пил, бризки крові")]
+    [Header("Hit Effects")]
+    [Tooltip("Instant effect: sparks, dust, blood splatters")]
     public GameObject impactVFXprefab;
 
-    [Tooltip("Постійний ефект: дірка від кулі (деколь)")]
+    [Tooltip("Permanent effect: bullet hole (decal)")]
     public GameObject bulletHolePrefab;
-
-    
 }

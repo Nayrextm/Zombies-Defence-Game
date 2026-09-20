@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using TMPro;
 
@@ -12,7 +11,6 @@ public class WeaponUI : MonoBehaviour
     {
         Instance = this;
     }
-
 
     public void UpdateAmmoText(int current, int reserve)
     {

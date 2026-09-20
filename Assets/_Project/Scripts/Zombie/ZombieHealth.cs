@@ -1,20 +1,18 @@
-
 using UnityEngine;
 
 public class ZombieHealth : MonoBehaviour, IDamageable
 {
-    [Header("Налаштування здоров'я")]
+    [Header("Health Settings")]
     [SerializeField] private float _maxHealth = 100f;
     private float _currentHealth;
 
-    [Header("Економіка")]
+    [Header("Economy")]
     [SerializeField] private int _rewardForKill = 100;
 
     private bool _isDead = false;
 
     private void Awake()
     {
-
         _currentHealth = _maxHealth;
     }
 
@@ -25,7 +23,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
 
         _currentHealth -= damage;
 
-        Debug.Log($"{gameObject.name} отримав {damage} шкоди. Залишилось: {_currentHealth}");
+        Debug.Log($"{gameObject.name} got {damage} damage. HP left: {_currentHealth}");
 
         if (_currentHealth <= 0)
         {
@@ -45,7 +43,7 @@ public class ZombieHealth : MonoBehaviour, IDamageable
             MoneyManager.Instance.AddMoney(bonusPoints);
         }
 
-        Debug.Log($"Влучання! Нанесено: {damage} шкоди. Миттєвий бонус: +{bonusPoints}. Залишилось HP: {_currentHealth}");
+        Debug.Log($"Hit! Has been caused {damage} damage. Insta bonus: +{bonusPoints}. HP Left: {_currentHealth}");
 
         if (_currentHealth <= 0)
         {
@@ -62,16 +60,13 @@ public class ZombieHealth : MonoBehaviour, IDamageable
 
         if (MoneyManager.Instance != null)
         {
-
             MoneyManager.Instance.AddMoney(_rewardForKill );
         }
 
-        Debug.Log($"Зомбі вбито! Загальна нагорода за вбивство: ${_rewardForKill }");
-
+        Debug.Log($"Zombie killed! Total kill reward: ${_rewardForKill }");
 
         if (TryGetComponent(out UnityEngine.AI.NavMeshAgent agent)) agent.isStopped = true;
         if (TryGetComponent(out Collider col)) col.enabled = false;
-
 
         Destroy(gameObject, 0.5f);
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
-    [Header("Налаштування інерції")]
+    [Header("Inertia settings")]
     [SerializeField] private float _smooth = 8f;
     [SerializeField] private float _swayMultiplier = 2f;
 

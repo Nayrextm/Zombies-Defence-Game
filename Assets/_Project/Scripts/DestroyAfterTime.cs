@@ -1,9 +1,8 @@
-
 using UnityEngine;
 
 public class DestroyAfterTime : MonoBehaviour
 {
-    [Tooltip("„ас об'Їкта в секундах")]
+    [Tooltip("Object time in seconds")]
     [SerializeField] private float _lifetime = 5f;
     void Start()
     {

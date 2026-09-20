@@ -7,12 +7,11 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         _health -= damage;
-        Debug.Log($"Гравцеві боляче! Залишилось: {_health}");
+        Debug.Log($"The player is in pain! Remaining HP is: { _health}");
 
         if (_health <= 0)
         {
-            Debug.Log("Гра закінчена!");
-            
+            Debug.Log("Game Over!");
         }
     }
 }

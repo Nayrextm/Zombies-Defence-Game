@@ -29,7 +29,6 @@ public class ZombieAI : MonoBehaviour
 
     private float _sqrAttackDistance;
 
-
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -61,7 +60,6 @@ public class ZombieAI : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         if (_playerTransform == null) return;
@@ -73,7 +71,6 @@ public class ZombieAI : MonoBehaviour
         {
             if (_animator != null)
             {
-                
                 _animator.SetBool(_isMovingHash, isMovingNow);
             }
            
@@ -98,7 +95,6 @@ public class ZombieAI : MonoBehaviour
 
     private void CheckAttackDistance()
     {
-
         Vector3 offset = _playerTransform.position - transform.position;
 
         float sqrDistance = offset.sqrMagnitude;
@@ -118,7 +114,6 @@ public class ZombieAI : MonoBehaviour
         }
         else
         {
-
             _agent.isStopped = false;
         }
     }
@@ -132,8 +127,7 @@ public class ZombieAI : MonoBehaviour
     }
     private void DealDamageToPlayer()
     {
-
-        Debug.Log("Çîìá³ ÂÄÀÐÈÂ òî÷íî â ö³ëü!");
+        Debug.Log("The zombie struck right on target!");
 
         if (_playerTransform != null && _playerTransform.TryGetComponent(out IDamageable damageable))
         {
@@ -144,15 +138,12 @@ public class ZombieAI : MonoBehaviour
 
     private void FaceTarget(Vector3 direction)
     {
-        
         direction.y = 0;
 
         if (direction.sqrMagnitude > 0.01f) 
         {
-            
             Quaternion lookRotation = Quaternion.LookRotation(direction);
 
-            
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         }
     }

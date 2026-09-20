@@ -47,7 +47,6 @@ public class WeaponCollision : MonoBehaviour
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, _currentPushZ);
         }
 
-       
         transform.localRotation = Quaternion.Euler(-_currentTilt, 0, 0);
     }
 }

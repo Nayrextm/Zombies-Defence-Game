@@ -13,14 +13,11 @@ public class WeaponRecoil : MonoBehaviour
     {
        
         if (_targetRotation == Vector3.zero && _currentRotation == Vector3.zero) return;
-
        
         _targetRotation = Vector3.Lerp(_targetRotation, Vector3.zero, Time.deltaTime * _weaponData.returnSpeed);
         _currentRotation = Vector3.Lerp(_currentRotation, _targetRotation, Time.deltaTime * _weaponData.snapiness);
 
-        
         transform.localRotation = Quaternion.Euler(_currentRotation);
-
        
         if (_currentRotation.sqrMagnitude < RecoilThreshold)
         {
